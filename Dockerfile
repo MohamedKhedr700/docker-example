@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Copy composer.lock and composer.json
 COPY src/composer.lock src/composer.json /var/www/html/
@@ -25,6 +25,14 @@ RUN apt-get update && apt-get install -y \
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 #Mine
+
+RUN apt-get update && \
+    apt-get install -y autoconf pkg-config libssl-dev git unzip libzip-dev zlib1g-dev && \
+    pecl install mongodb && docker-php-ext-enable mongodb && \
+    pecl install xdebug && docker-php-ext-enable xdebug && \
+    docker-php-ext-install -j$(nproc) zip
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
