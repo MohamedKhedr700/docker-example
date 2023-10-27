@@ -22,16 +22,15 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libzip-dev \
     libgd-dev
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-#Mine
 
+#Mongo
 RUN apt-get update && \
     apt-get install -y autoconf pkg-config libssl-dev git unzip libzip-dev zlib1g-dev && \
     pecl install mongodb && docker-php-ext-enable mongodb && \
     pecl install xdebug && docker-php-ext-enable xdebug && \
     docker-php-ext-install -j$(nproc) zip
 
+# Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
